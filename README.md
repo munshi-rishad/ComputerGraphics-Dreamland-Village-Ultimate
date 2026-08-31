@@ -64,5 +64,5 @@ https://drive.google.com/file/d/1_UcEC8l-ug3ilsZQ2rCFEUmWVuPChvQw/view?usp=drive
 Clone the repository to your local machine:
 
 ```bash
-git clone https://github.com/munshi-rishad/Dreamland-Village-Ultimate.git
+git clone https://github.com/munshi-rishad/ComputerGraphics-Dreamland-Village-Ultimate.git
 ```
