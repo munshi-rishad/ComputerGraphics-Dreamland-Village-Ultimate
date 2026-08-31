@@ -1,0 +1,111 @@
+# depslib dependency file v1.0
+1761037065 source:c:\src\src\openglportable\openglportable\main.cpp
+	<GL/glut.h>
+
+1761036817 c:\src\src\openglportable\freeglut\include\gl\glut.h
+	"freeglut_std.h"
+
+1761036817 c:\src\src\openglportable\freeglut\include\gl\freeglut_std.h
+	<windows.h>
+	<EGL/egl.h>
+	<GLES/gl.h>
+	<GLES2/gl2.h>
+	<OpenGL/gl.h>
+	<OpenGL/glu.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	<stdlib.h>
+
+1761531191 source:c:\courses\fall 25-26\computer graphics [m]\openglportable-64bit\openglportable\main.cpp
+	<GL/glut.h>
+
+1761232548 c:\courses\fall 25-26\computer graphics [m]\openglportable-64bit\freeglut\include\gl\glut.h
+	"freeglut_std.h"
+
+1761232548 c:\courses\fall 25-26\computer graphics [m]\openglportable-64bit\freeglut\include\gl\freeglut_std.h
+	<windows.h>
+	<EGL/egl.h>
+	<GLES/gl.h>
+	<GLES2/gl2.h>
+	<OpenGL/gl.h>
+	<OpenGL/glu.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	<stdlib.h>
+
+1781637590 source:c:\users\najiy\desktop\computer graphics\openglportable-64bit\openglportable\main.cpp
+	<GL/glut.h>
+	<math.h>
+
+1761232548 c:\users\najiy\desktop\computer graphics\openglportable-64bit\freeglut\include\gl\glut.h
+	"freeglut_std.h"
+
+1761232548 c:\users\najiy\desktop\computer graphics\openglportable-64bit\freeglut\include\gl\freeglut_std.h
+	<windows.h>
+	<EGL/egl.h>
+	<GLES/gl.h>
+	<GLES2/gl2.h>
+	<OpenGL/gl.h>
+	<OpenGL/glu.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	<stdlib.h>
+
+1782116399 source:c:\users\najiy\desktop\my document\computer graphics\openglportable-64bit\openglportable\main.cpp
+	<GL/glut.h>
+	<cmath>
+
+1761232548 c:\users\najiy\desktop\my document\computer graphics\openglportable-64bit\freeglut\include\gl\glut.h
+	"freeglut_std.h"
+
+1761232548 c:\users\najiy\desktop\my document\computer graphics\openglportable-64bit\freeglut\include\gl\freeglut_std.h
+	<windows.h>
+	<EGL/egl.h>
+	<GLES/gl.h>
+	<GLES2/gl2.h>
+	<OpenGL/gl.h>
+	<OpenGL/glu.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	<stdlib.h>
+
+1786943557 source:c:\users\najiy\desktop\computer_graphics_25-26\openglportable-64bit\openglportable\main.cpp
+	<windows.h>
+	<GL/glut.h>
+	<cmath>
+	<cstdlib>
+
+1782332253 c:\users\najiy\desktop\computer_graphics_25-26\openglportable-64bit\freeglut\include\gl\glut.h
+	"freeglut_std.h"
+
+1782332253 c:\users\najiy\desktop\computer_graphics_25-26\openglportable-64bit\freeglut\include\gl\freeglut_std.h
+	<windows.h>
+	<EGL/egl.h>
+	<GLES/gl.h>
+	<GLES2/gl2.h>
+	<OpenGL/gl.h>
+	<OpenGL/glu.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	<stdlib.h>
+
+1787151706 source:c:\users\najiy\desktop\computer graphics project\openglportable-64bit\openglportable\main.cpp
+	<windows.h>
+	<GL/glut.h>
+	<cmath>
+	<cstdlib>
+
+1782332253 c:\users\najiy\desktop\computer graphics project\openglportable-64bit\freeglut\include\gl\glut.h
+	"freeglut_std.h"
+
+1782332253 c:\users\najiy\desktop\computer graphics project\openglportable-64bit\freeglut\include\gl\freeglut_std.h
+	<windows.h>
+	<EGL/egl.h>
+	<GLES/gl.h>
+	<GLES2/gl2.h>
+	<OpenGL/gl.h>
+	<OpenGL/glu.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	<stdlib.h>
+
