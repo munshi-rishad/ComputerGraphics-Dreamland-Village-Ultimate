@@ -15,15 +15,6 @@ A C++ OpenGL-based computer graphics project that presents an animated village e
 - Help panel and fullscreen mode.
 - Portable OpenGL/freeglut project files included.
 
-## Hardware & Software
-
-- C++
-- OpenGL
-- GLUT / FreeGLUT
-- Code::Blocks
-- Windows Operating System
-- OpenGL Portable Environment
-
 ## Setup Instructions
 
 1. Open the project folder.
