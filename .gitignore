@@ -1,0 +1,6 @@
+# Code::Blocks build files
+obj/
+*.o
+*.depend
+*.layout
+bin/Release/

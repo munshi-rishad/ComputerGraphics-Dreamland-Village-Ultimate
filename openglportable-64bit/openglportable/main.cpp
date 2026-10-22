@@ -1,10 +1,29 @@
+// Dreamland Village Ultimate
+// Computer Graphics [A] - Final Term Project (Group 07)
+//
+// A 2D animated village made with OpenGL + FreeGLUT.
+// Keys: Enter = start, 1-4 = Day/Sunset/Night/Rain, B = boat, L = lights,
+//       H = help, F = fullscreen, M/U = sound off/on, arrows = boat direction, Esc = exit.
+//
+// The whole scene is drawn in a 100 x 80 world (see gluOrtho2D in init()).
+
 #include <windows.h>
+#include <mmsystem.h>   // PlaySound (link with winmm)
 #include <GL/glut.h>
 #include <cmath>
 #include <cstdlib>
+#include <cstring>
+
 #define PI 3.14159265358979323846
 
-int sceneMode = 0;
+// Scene modes
+const int DAY = 0;
+const int SUNSET = 1;
+const int NIGHT = 2;
+const int RAIN = 3;
+
+// ---------------- Program state ----------------
+int sceneMode = DAY;
 bool introScreen = true;
 bool musicOn = true;
 bool showHelp = true;
@@ -48,82 +67,76 @@ float ripplePhase = 0.0f;
 float starTwinklePhase = 0.0f;
 float rainSplashPhase = 0.0f;
 float oarPhase = 0.0f;
-typedef BOOL (WINAPI *PlaySoundAFunc)(LPCSTR, HMODULE, DWORD);
-PlaySoundAFunc getPlaySoundFunction()
+
+// ---------------- Sound ----------------
+// The .wav files are kept next to the .exe (bin/Debug), so we build the full
+// path from the .exe folder. This way sound works from Code::Blocks and also
+// when the .exe is opened directly.
+const char* soundPath(const char* fileName)
 {
-    static HMODULE winmm = LoadLibraryA("winmm.dll");
-    static PlaySoundAFunc playSoundA = NULL;
-    if (winmm != NULL && playSoundA == NULL)
-    {
-        playSoundA =
-            (PlaySoundAFunc)GetProcAddress(winmm, "PlaySoundA");
-    }
-    return playSoundA;
+    static char path[MAX_PATH];
+    GetModuleFileNameA(NULL, path, MAX_PATH);
+
+    char* lastSlash = strrchr(path, '\\');
+    if (lastSlash != NULL)
+        strcpy(lastSlash + 1, fileName);
+    else
+        strcpy(path, fileName);
+
+    // Not next to the .exe? Then look in the current working folder.
+    if (GetFileAttributesA(path) == INVALID_FILE_ATTRIBUTES)
+        return fileName;
+
+    return path;
 }
+
 void stopSound()
 {
-    PlaySoundAFunc playSoundA = getPlaySoundFunction();
-    if (playSoundA != NULL)
-    {
-        playSoundA(NULL, NULL, 0);
-    }
+    PlaySoundA(NULL, NULL, 0);
 }
+
+// Plays a sound again and again until another sound starts
 void playLoopSound(const char* fileName)
 {
     if (!musicOn)
         return;
-    PlaySoundAFunc playSoundA = getPlaySoundFunction();
-    if (playSoundA != NULL)
-    {
-        const DWORD SND_ASYNC_FLAG = 0x0001;
-        const DWORD SND_LOOP_FLAG = 0x0008;
-        const DWORD SND_FILENAME_FLAG = 0x00020000;
-        playSoundA(
-            fileName,
-            NULL,
-            SND_ASYNC_FLAG |
-            SND_LOOP_FLAG |
-            SND_FILENAME_FLAG
-        );
-    }
+    PlaySoundA(soundPath(fileName), NULL, SND_ASYNC | SND_LOOP | SND_FILENAME);
 }
-void updateSound();
-void resumeSceneSound(int)
-{
-    if (musicOn)
-        updateSound();
-}
-void cowSoundTimer(int)
-{
-    if (!introScreen && musicOn && (sceneMode == 0 || sceneMode == 1))
-    {
-        PlaySoundAFunc playSoundA = getPlaySoundFunction();
-        if (playSoundA != NULL)
-        {
-            const DWORD SND_ASYNC_FLAG = 0x0001;
-            const DWORD SND_FILENAME_FLAG = 0x00020000;
-            playSoundA(
-                "cow.wav",
-                NULL,
-                SND_ASYNC_FLAG | SND_FILENAME_FLAG
-            );
-            glutTimerFunc(2000, resumeSceneSound, 0);
-        }
-    }
-    glutTimerFunc(10000, cowSoundTimer, 0);
-}
+
+// Every scene has its own background sound
 void updateSound()
 {
     stopSound();
     if (!musicOn)
         return;
-    if (sceneMode == 3)
+
+    if (sceneMode == RAIN)
         playLoopSound("rain.wav");
-    else if (sceneMode == 2)
+    else if (sceneMode == NIGHT)
         playLoopSound("night.wav");
     else
         playLoopSound("nature.wav");
 }
+
+void resumeSceneSound(int)
+{
+    if (musicOn)
+        updateSound();
+}
+
+// The cow says "moo" every 10 seconds in Day and Sunset,
+// then the scene sound starts again after 2 seconds.
+void cowSoundTimer(int)
+{
+    if (!introScreen && musicOn && (sceneMode == DAY || sceneMode == SUNSET))
+    {
+        PlaySoundA(soundPath("cow.wav"), NULL, SND_ASYNC | SND_FILENAME);
+        glutTimerFunc(2000, resumeSceneSound, 0);
+    }
+    glutTimerFunc(10000, cowSoundTimer, 0);
+}
+
+// ---------------- Basic shapes ----------------
 void rect(float x1, float y1, float x2, float y2)
 {
     glBegin(GL_QUADS);
@@ -175,6 +188,7 @@ void drawText(float x, float y, const char* text, void* font)
         glutBitmapCharacter(font, text[i]);
     }
 }
+// ---------------- Intro screen ----------------
 void drawIntro()
 {
     glClearColor(0.03f, 0.08f, 0.16f, 1.0f);
@@ -238,24 +252,25 @@ void drawIntro()
     );
     glutSwapBuffers();
 }
+// ---------------- Sky, sun, moon, stars, clouds, birds ----------------
 void drawSky()
 {
     glBegin(GL_QUADS);
-    if (sceneMode == 0)
+    if (sceneMode == DAY)
         glColor3f(0.08f, 0.52f, 0.95f);
-    else if (sceneMode == 1)
+    else if (sceneMode == SUNSET)
         glColor3f(0.42f, 0.10f, 0.40f);
-    else if (sceneMode == 2)
+    else if (sceneMode == NIGHT)
         glColor3f(0.01f, 0.03f, 0.12f);
     else
         glColor3f(0.16f, 0.24f, 0.34f);
     glVertex2f(0, 80);
     glVertex2f(100, 80);
-    if (sceneMode == 0)
+    if (sceneMode == DAY)
         glColor3f(0.65f, 0.90f, 1.0f);
-    else if (sceneMode == 1)
+    else if (sceneMode == SUNSET)
         glColor3f(1.0f, 0.42f, 0.16f);
-    else if (sceneMode == 2)
+    else if (sceneMode == NIGHT)
         glColor3f(0.04f, 0.08f, 0.22f);
     else
         glColor3f(0.38f, 0.48f, 0.58f);
@@ -265,17 +280,17 @@ void drawSky()
 }
 void drawSunMoonStars()
 {
-    if (sceneMode == 0)
+    if (sceneMode == DAY)
     {
         glColor3f(1.0f, 0.68f, 0.06f);
         circle(18, 69, 4.5f);
     }
-    else if (sceneMode == 1)
+    else if (sceneMode == SUNSET)
     {
         glColor3f(1.0f, 0.22f, 0.03f);
         circle(76, 47, 5.0f);
     }
-    else if (sceneMode == 2)
+    else if (sceneMode == NIGHT)
     {
         glColor3f(1.0f, 0.95f, 0.68f);
         circle(82, 69, 4.1f);
@@ -302,7 +317,7 @@ void drawSunMoonStars()
 }
 void drawSunRays()
 {
-    if (sceneMode != 0)
+    if (sceneMode != DAY)
         return;
 
     glPushMatrix();
@@ -325,7 +340,7 @@ void drawSunRays()
 
 void drawGrassDetails()
 {
-    if (sceneMode == 2)
+    if (sceneMode == NIGHT)
         glColor3f(0.05f, 0.25f, 0.06f);
     else
         glColor3f(0.08f, 0.42f, 0.08f);
@@ -355,25 +370,25 @@ void drawRipple(float cx, float cy, float rx, float ry)
 
 void drawRiverRipples()
 {
-    if (sceneMode == 3)
+    if (sceneMode == RAIN)
         return;
 
     float p = 0.35f + (sin(ripplePhase) + 1.0f) * 0.35f;
 
-    if (sceneMode == 2)
+    if (sceneMode == NIGHT)
         glColor3f(0.25f, 0.45f, 0.65f);
     else
         glColor3f(0.62f, 0.90f, 1.0f);
 
     drawRipple(34.0f + boatX, 5.6f, 2.5f + p, 0.45f + p * 0.15f);
 
-    if (sceneMode == 0 || sceneMode == 1)
+    if (sceneMode == DAY || sceneMode == SUNSET)
         drawRipple(72.0f + duckOffset, 7.4f, 1.7f + p * 0.7f, 0.30f + p * 0.10f);
 }
 
 void drawTwinklingStars()
 {
-    if (sceneMode != 2)
+    if (sceneMode != NIGHT)
         return;
 
     const float sx[12] = {8, 16, 24, 32, 41, 51, 59, 68, 76, 86, 92, 97};
@@ -389,7 +404,7 @@ void drawTwinklingStars()
 
 void drawRainSplashes()
 {
-    if (sceneMode != 3)
+    if (sceneMode != RAIN)
         return;
 
     glColor3f(0.75f, 0.85f, 1.0f);
@@ -406,7 +421,7 @@ void drawRainSplashes()
 
 void drawCloud(float x, float y, float s)
 {
-    if (sceneMode == 3)
+    if (sceneMode == RAIN)
         glColor3f(0.34f, 0.35f, 0.38f);
     else
         glColor3f(1.0f, 1.0f, 1.0f);
@@ -418,7 +433,7 @@ void drawCloud(float x, float y, float s)
 }
 void drawClouds()
 {
-    if (sceneMode == 2)
+    if (sceneMode == NIGHT)
         return;
     glPushMatrix();
     glTranslatef(cloudOffsetA, 0, 0);
@@ -431,9 +446,10 @@ void drawClouds()
     drawCloud(91, 73, 0.60f);
     glPopMatrix();
 }
+// ---------------- Land: hills, field, path, trees, houses ----------------
 void drawHills()
 {
-    if (sceneMode == 2)
+    if (sceneMode == NIGHT)
         glColor3f(0.06f, 0.18f, 0.12f);
     else
         glColor3f(0.12f, 0.50f, 0.28f);
@@ -448,7 +464,7 @@ void drawHills()
     glVertex2f(78, 49);
     glVertex2f(100, 36);
     glEnd();
-    if (sceneMode == 2)
+    if (sceneMode == NIGHT)
         glColor3f(0.08f, 0.24f, 0.10f);
     else
         glColor3f(0.24f, 0.68f, 0.30f);
@@ -477,7 +493,7 @@ void drawBird(float x, float y, float s)
 }
 void drawBirds()
 {
-    if (sceneMode == 2 || sceneMode == 3)
+    if (sceneMode == NIGHT || sceneMode == RAIN)
         return;
     glPushMatrix();
     glTranslatef(birdOffset, 0, 0);
@@ -490,7 +506,7 @@ void drawBirds()
 
 void drawPaddyField()
 {
-    if (sceneMode == 2)
+    if (sceneMode == NIGHT)
         glColor3f(0.20f, 0.34f, 0.08f);
     else
         glColor3f(0.72f, 0.82f, 0.12f);
@@ -506,7 +522,7 @@ void drawPaddyField()
     for (float y = 19; y < 28; y += 2.0f)
         line(0, y, 36, y+0.8f, 1.0f);
 
-    if (sceneMode == 2)
+    if (sceneMode == NIGHT)
         glColor3f(0.08f, 0.30f, 0.05f);
     else
         glColor3f(0.10f, 0.52f, 0.08f);
@@ -577,7 +593,7 @@ void drawBanyanTree()
     glRotatef(sin(palmPhase*0.55f) * 1.4f, 0, 0, 1);
     glTranslatef(-10.0f, -53.0f, 0.0f);
 
-    if (sceneMode == 2)
+    if (sceneMode == NIGHT)
         glColor3f(0.0f, 0.20f, 0.03f);
     else
         glColor3f(0.02f, 0.48f, 0.08f);
@@ -613,9 +629,9 @@ void drawPalmTree(float x, float y, float s)
     glRotatef(sway, 0, 0, 1);
     glTranslatef(-0.5f, -21.0f, 0);
 
-    if (sceneMode == 2)
+    if (sceneMode == NIGHT)
         glColor3f(0.00f, 0.25f, 0.04f);
-    else if (sceneMode == 3)
+    else if (sceneMode == RAIN)
         glColor3f(0.04f, 0.36f, 0.07f);
     else
         glColor3f(0.04f, 0.55f, 0.09f);
@@ -705,7 +721,7 @@ void drawBananaPlant(float x, float y, float s)
     glRotatef(sin(bananaPhase + x*0.16f) * 3.2f, 0, 0, 1);
     glTranslatef(0, -10.0f, 0);
 
-    if (sceneMode == 2)
+    if (sceneMode == NIGHT)
         glColor3f(0.05f, 0.30f, 0.08f);
     else
         glColor3f(0.10f, 0.60f, 0.12f);
@@ -807,7 +823,7 @@ void drawHouseOne()
     glVertex2f(32, 30.5f);
     glEnd();
 
-    if (sceneMode == 2 && houseLights)
+    if (sceneMode == NIGHT && houseLights)
         glColor3f(1.0f, 0.88f, 0.18f);
     else
         glColor3f(0.38f, 0.78f, 0.92f);
@@ -858,7 +874,7 @@ void drawHouseTwo()
     glEnd();
     glColor3f(0.30f, 0.12f, 0.03f);
     rect(83, 27, 87, 36);
-    if (sceneMode == 2 && houseLights)
+    if (sceneMode == NIGHT && houseLights)
         glColor3f(1.0f, 0.90f, 0.22f);
     else
         glColor3f(0.85f, 0.95f, 1.0f);
@@ -870,7 +886,7 @@ void drawHouseTwo()
 }
 void drawSmoke()
 {
-    if (sceneMode == 3)
+    if (sceneMode == RAIN)
         return;
     float rise = fmod(smokePhase, 6.0f);
     glColor3f(0.65f, 0.65f, 0.65f);
@@ -885,13 +901,14 @@ void drawChimney()
     drawSmoke();
 }
 
+// ---------------- Animals and village details ----------------
 void drawCow(float x, float y, float s)
 {
     glPushMatrix();
     glTranslatef(x, y + sin(cowLegPhase)*0.10f, 0);
     glScalef(s, s, 1);
 
-    if (sceneMode == 2)
+    if (sceneMode == NIGHT)
         glColor3f(0.65f, 0.65f, 0.62f);
     else
         glColor3f(0.95f, 0.95f, 0.90f);
@@ -1055,7 +1072,7 @@ void drawClothesline()
         glVertex2f(x, y);
     }
     glEnd();
-    if (sceneMode == 2 || sceneMode == 3)
+    if (sceneMode == NIGHT || sceneMode == RAIN)
         return;
     float wave = sin(clothPhase) * 0.35f;
     glColor3f(0.95f, 0.12f, 0.18f);
@@ -1083,6 +1100,7 @@ void drawClothesline()
     glVertex2f(66.5f+wave, 29.0f);
     glEnd();
 }
+// ---------------- River, boat, ducks, fish ----------------
 void drawRiver()
 {
     glBegin(GL_QUAD_STRIP);
@@ -1091,19 +1109,19 @@ void drawRiver()
         float top =
             16.0f +
             sin(x*0.20f + riverPhase) * 0.65f;
-        if (sceneMode == 2)
+        if (sceneMode == NIGHT)
             glColor3f(0.02f, 0.22f, 0.45f);
         else
             glColor3f(0.00f, 0.56f, 0.92f);
         glVertex2f(x, top);
-        if (sceneMode == 2)
+        if (sceneMode == NIGHT)
             glColor3f(0.01f, 0.10f, 0.28f);
         else
             glColor3f(0.00f, 0.32f, 0.68f);
         glVertex2f(x, 0);
     }
     glEnd();
-    if (sceneMode != 2)
+    if (sceneMode != NIGHT)
     {
         glColor3f(0.48f, 0.88f, 1.0f);
         for (int i = 0; i < 9; i++)
@@ -1121,14 +1139,14 @@ void drawRiver()
 }
 void drawReflection()
 {
-    if (sceneMode == 3)
+    if (sceneMode == RAIN)
         return;
     float shimmer =
         sin(reflectionPhase) *
         0.8f;
-    if (sceneMode == 0)
+    if (sceneMode == DAY)
         glColor3f(1.0f, 0.70f, 0.18f);
-    else if (sceneMode == 1)
+    else if (sceneMode == SUNSET)
         glColor3f(1.0f, 0.35f, 0.10f);
     else
         glColor3f(0.70f, 0.75f, 0.90f);
@@ -1241,7 +1259,7 @@ void drawBoat()
         glTranslatef(-34, 0, 0);
     }
     drawBoatBody();
-    if (sceneMode != 3)
+    if (sceneMode != RAIN)
         drawFisherman();
     glPopMatrix();
 }
@@ -1265,7 +1283,7 @@ void drawDuck(float x, float y, float s)
 }
 void drawDucks()
 {
-    if (sceneMode == 2 || sceneMode == 3)
+    if (sceneMode == NIGHT || sceneMode == RAIN)
         return;
     glPushMatrix();
     glTranslatef(duckOffset, 0, 0);
@@ -1280,7 +1298,7 @@ void drawOneFish(float x, float y, float s, bool faceRight, float phase)
     glTranslatef(x, y + sin(phase)*0.30f, 0);
     glScalef(faceRight ? s : -s, s, 1);
 
-    if (sceneMode == 2)
+    if (sceneMode == NIGHT)
         glColor3f(0.75f, 0.30f, 0.06f);
     else
         glColor3f(1.0f, 0.45f, 0.05f);
@@ -1311,7 +1329,7 @@ void drawOneFish(float x, float y, float s, bool faceRight, float phase)
 
 void drawFish()
 {
-    if (sceneMode == 3)
+    if (sceneMode == RAIN)
     {
         float jump1 = fabs(sin(fishPhase)) * 5.0f;
         float jump2 = fabs(sin(fishPhase + 1.0f)) * 4.0f;
@@ -1340,9 +1358,10 @@ void drawFish()
     drawOneFish(e, 10.0f, 0.6f, true, fishPhase + 4.0f);
 }
 
+// ---------------- Night and rain effects ----------------
 void drawFireflies()
 {
-    if (sceneMode != 2)
+    if (sceneMode != NIGHT)
         return;
     glPointSize(5.0f);
     glColor3f(1.0f, 0.95f, 0.15f);
@@ -1361,7 +1380,7 @@ void drawFireflies()
 }
 void drawRain()
 {
-    if (sceneMode != 3)
+    if (sceneMode != RAIN)
         return;
     glColor3f(0.82f, 0.88f, 1.0f);
     glLineWidth(1.0f);
@@ -1384,6 +1403,7 @@ void drawRain()
         glEnd();
     }
 }
+// ---------------- Help panel ----------------
 void drawHelpPanel()
 {
     if (!showHelp)
@@ -1412,6 +1432,7 @@ void drawHelpPanel()
     );
 }
 
+// ---------------- Drawing order (back to front) ----------------
 void display()
 {
     if (introScreen)
@@ -1431,12 +1452,12 @@ void display()
     drawHills();
     drawPaddyField();
 
-    if (sceneMode == 0 || sceneMode == 1)
+    if (sceneMode == DAY || sceneMode == SUNSET)
         drawChicken(chickenX, 22.0f + sin(chickenWalkPhase) * 0.05f, 0.65f);
 
     drawGrassDetails();
 
-    if (sceneMode == 0 || sceneMode == 1)
+    if (sceneMode == DAY || sceneMode == SUNSET)
     {
         glPushMatrix();
 
@@ -1488,6 +1509,7 @@ void display()
     glutSwapBuffers();
 }
 
+// ---------------- Animation: runs about 60 times per second ----------------
 void update(int)
 {
     cloudOffsetA += 0.012f;
@@ -1517,7 +1539,7 @@ void update(int)
     starTwinklePhase += 0.075f;
     rainSplashPhase += 0.18f;
 
-    if (sceneMode == 0 || sceneMode == 1)
+    if (sceneMode == DAY || sceneMode == SUNSET)
     {
         cowX += 0.012f * cowDirection;
 
@@ -1542,7 +1564,7 @@ void update(int)
             chickenX = 22.0f;
     }
 
-    if (boatMoving && sceneMode != 3)
+    if (boatMoving && sceneMode != RAIN)
     {
         boatX += 0.06f * boatDirection;
         if (boatX > 58)
@@ -1558,14 +1580,14 @@ void update(int)
     fishPhase += 0.07f;
     fishSwim += 0.08f;
 
-    if (boatMoving && sceneMode != 3)
+    if (boatMoving && sceneMode != RAIN)
         oarPhase += 0.08f;
 
     smokePhase += 0.03f;
     clothPhase += 0.08f;
     fireflyPhase += 0.07f;
 
-    if (sceneMode == 3)
+    if (sceneMode == RAIN)
     {
         for (int i = 0; i < 260; i++)
         {
@@ -1590,6 +1612,7 @@ void update(int)
     glutTimerFunc(16, update, 0);
 }
 
+// ---------------- Keyboard and mouse ----------------
 void toggleFullScreen()
 {
     if (!fullScreen)
@@ -1624,34 +1647,34 @@ void keyboard(unsigned char key, int, int)
     switch (key)
     {
         case '1':
-            sceneMode = 0;
+            sceneMode = DAY;
             updateSound();
             break;
         case '2':
-            sceneMode = 1;
+            sceneMode = SUNSET;
             updateSound();
             break;
         case '3':
-            sceneMode = 2;
+            sceneMode = NIGHT;
             updateSound();
             break;
         case '4':
-            sceneMode = 3;
+            sceneMode = RAIN;
             updateSound();
             break;
         case 'd':
         case 'D':
-            sceneMode = 0;
+            sceneMode = DAY;
             updateSound();
             break;
         case 'n':
         case 'N':
-            sceneMode = 2;
+            sceneMode = NIGHT;
             updateSound();
             break;
         case 'r':
         case 'R':
-            sceneMode = 3;
+            sceneMode = RAIN;
             updateSound();
             break;
         case 'b':
@@ -1701,6 +1724,7 @@ void specialKeys(int key, int, int)
     }
     glutPostRedisplay();
 }
+// Left click = boat goes right, right click = boat goes left, middle click = stop
 void mouse(int button, int state, int, int)
 {
     if (state != GLUT_DOWN)
@@ -1720,12 +1744,13 @@ void mouse(int button, int state, int, int)
         boatMoving = false;
     }
 }
+// ---------------- Setup ----------------
 void init()
 {
     glClearColor(0.65f, 0.85f, 1.0f, 1.0f);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluOrtho2D(0.0, 100.0, 0.0, 80.0);
+    gluOrtho2D(0.0, 100.0, 0.0, 80.0);   // world is 100 units wide and 80 units high
     for (int i = 0; i < 260; i++)
     {
         rainX[i] = (float)(rand() % 100);

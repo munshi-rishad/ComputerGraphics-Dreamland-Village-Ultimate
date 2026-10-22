@@ -1,68 +1,114 @@
 # Dreamland Village Ultimate
 
-A C++ OpenGL-based computer graphics project that presents an animated village environment with multiple scene modes including **Day**, **Sunset**, **Night**, and **Rain**. The project includes interactive controls, moving objects, environmental animations, lighting effects, and scene-based sound.
+A C++ OpenGL computer graphics project that shows an animated Bangladeshi village with four scene modes: **Day**, **Sunset**, **Night** and **Rain**. It has moving clouds, birds, a walking cow, a rowing boat, fish, ducks, rain with lightning, and a different background sound for each scene.
+
+Computer Graphics [A] – Final Term Project, Group 07 (AIUB).
 
 ## Features
 
-- Interactive animated village environment using OpenGL/GLUT.
-- Day, Sunset, Night, and Rain scene modes.
-- Animated boat movement with keyboard direction control.
-- Moving clouds, birds, fish, ducks, animals, smoke, clothes, grass, and water effects.
-- Night scene with stars, moon, house lights, and firefly effects.
-- Rain scene with rainfall and environmental effects.
-- Scene-based background sound and sound controls.
-- House light on/off control.
+- Day, Sunset, Night and Rain scenes with their own sounds.
+- Boat that you can start, stop and steer.
+- Moving clouds, birds, cow, chicken, fish, ducks, smoke, clothes, trees and water waves.
+- Night scene with moon, twinkling stars, fireflies and house lights.
+- Rain scene with falling rain, splashes, lightning and jumping fish.
 - Help panel and fullscreen mode.
-- Portable OpenGL/freeglut project files included.
 
-## Setup Instructions
+## Requirements
 
-1. Open the project folder.
-2. Open `openglportable-64bit/openglportable/openglportable.cbp` in Code::Blocks.
-3. Make sure the included FreeGLUT/OpenGL files are available with the project.
-4. Build and run the project.
-5. Press **Enter** on the intro screen to start the village scene.
-6. Use the keyboard controls shown in the project to switch scenes and interact with the animation.
+- **Windows** (the sound uses Windows `PlaySound`)
+- **64-bit MinGW g++ compiler** – easiest way is [Code::Blocks with MinGW](https://www.codeblocks.org/downloads/binaries/) (the `mingw-setup` installer), or [WinLibs](https://winlibs.com/)
+- **VS Code** – download from [code.visualstudio.com](https://code.visualstudio.com/) with the **C/C++** extension
 
-> **Note:** The existing computer graphics project files, source code, design, audio, executable, and output have been kept unchanged. Only the screenshots were renamed and organized, and this README was added for repository presentation.
+FreeGLUT is already included in the project, so you don't need to install it.
 
-## Project Video
-
-Watch the project demonstration video:
-
-https://drive.google.com/file/d/1_UcEC8l-ug3ilsZQ2rCFEUmWVuPChvQw/view?usp=drive_link
-
-## Project Screenshots
-
-### 1. Day Scene
-![Day Scene](Screenshots/01_Day_Scene.png)
-
-### 2. Sunset Scene
-![Sunset Scene](Screenshots/02_Sunset_Scene.png)
-
-### 3. Night Scene
-![Night Scene](Screenshots/03_Night_Scene.png)
-
-### 4. Rain Scene
-![Rain Scene](Screenshots/04_Rain_Scene.png)
-
-## How to Use
-
-1. Run the project and press **Enter** to start.
-2. Press `1` for Day mode.
-3. Press `2` for Sunset mode.
-4. Press `3` for Night mode.
-5. Press `4` for Rain mode.
-6. Press `B` to start or stop the boat movement.
-7. Press `L` to turn the house lights on or off.
-8. Press `H` to show or hide the help panel.
-9. Press `F` to toggle fullscreen mode.
-10. Press `M` to turn sound off and `U` to turn sound on.
-11. Use the Left and Right Arrow keys to control the boat direction.
-12. Press `Esc` to exit the application.
-
-Clone the repository to your local machine:
+## Clone the Project
 
 ```bash
 git clone https://github.com/munshi-rishad/ComputerGraphics-Dreamland-Village-Ultimate.git
 ```
+
+## Run in VS Code
+
+1. Install the MinGW compiler and make sure `g++ --version` works in a new terminal.
+   (With Code::Blocks, add `C:\Program Files\CodeBlocks\MinGW\bin` to the Windows `PATH`.)
+2. Open VS Code, install the **C/C++** extension, then **File → Open Folder** and open the cloned project folder.
+3. Open the terminal (**Terminal → New Terminal**) and go to the source folder:
+
+   ```bash
+   cd openglportable-64bit/openglportable
+   ```
+
+4. Build the program:
+
+   ```bash
+   g++ main.cpp -I../freeglut/include -L../freeglut/lib/x64 -lfreeglut -lopengl32 -lglu32 -lwinmm -o bin/Debug/openglportable.exe
+   ```
+
+5. Run it (the `.wav` sounds and `freeglut.dll` are in the same folder):
+
+   ```bash
+   cd bin/Debug
+   ./openglportable.exe
+   ```
+
+6. Press **Enter** on the intro screen to start.
+
+**Other ways to run:**
+
+- **Code::Blocks:** open `openglportable-64bit/openglportable/openglportable.cbp` and press **F9** (Build and run).
+- **Without building:** double-click `openglportable-64bit/openglportable/bin/Debug/openglportable.exe`.
+
+## Controls
+
+| Key | Action |
+|-----|--------|
+| `Enter` | Start from the intro screen |
+| `1` / `2` / `3` / `4` | Day / Sunset / Night / Rain |
+| `B` | Start or stop the boat |
+| `Left` / `Right` arrow | Boat goes left / right |
+| `L` | House lights on / off |
+| `H` | Show / hide help panel |
+| `F` | Fullscreen on / off |
+| `M` / `U` | Sound off / on |
+| Mouse left / right / middle click | Boat goes right / left / stops |
+| `Esc` | Exit |
+
+## Project Video
+
+https://drive.google.com/file/d/1_UcEC8l-ug3ilsZQ2rCFEUmWVuPChvQw/view?usp=drive_link
+
+## Project Report
+
+[Final_Term_Project_Report.pdf](Final_Term_Project_Report.pdf)
+
+## Screenshots
+
+### Intro Screen
+
+The start screen with the project title. Press Enter to begin.
+
+![Intro Screen](Screenshots/00_Intro_Screen.png)
+
+### Day Scene
+
+Blue sky, sun with rotating rays, paddy field, walking cow and the rowing boat.
+
+![Day Scene](Screenshots/01_Day_Scene.png)
+
+### Sunset Scene
+
+Purple-orange sky with the red sun going down.
+
+![Sunset Scene](Screenshots/02_Sunset_Scene.png)
+
+### Night Scene
+
+Dark sky with the moon, stars, fireflies and lit house windows.
+
+![Night Scene](Screenshots/03_Night_Scene.png)
+
+### Rain Scene
+
+Grey sky with falling rain, splashes, lightning and jumping fish.
+
+![Rain Scene](Screenshots/04_Rain_Scene.png)

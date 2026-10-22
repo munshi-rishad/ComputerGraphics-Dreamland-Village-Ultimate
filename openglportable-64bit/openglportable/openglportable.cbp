@@ -11,19 +11,14 @@
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
+				<Option working_dir="bin/Debug/" />
 				<Compiler>
 					<Add option="-g" />
-					<Add directory="../freeglut/include" />
 				</Compiler>
-				<Linker>
-					<Add library="freeglut" />
-					<Add library="opengl32" />
-					<Add library="glu32" />
-					<Add directory="../freeglut/lib/x64" />
-				</Linker>
 			</Target>
 			<Target title="Release">
 				<Option output="bin/Release/openglportable" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="bin/Debug/" />
 				<Option object_output="obj/Release/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
@@ -38,9 +33,14 @@
 		<Compiler>
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
+			<Add directory="../freeglut/include" />
 		</Compiler>
 		<Linker>
-			<Add option="-lwinmm" />
+			<Add library="freeglut" />
+			<Add library="opengl32" />
+			<Add library="glu32" />
+			<Add library="winmm" />
+			<Add directory="../freeglut/lib/x64" />
 		</Linker>
 		<Unit filename="main.cpp" />
 		<Extensions>
