@@ -83,32 +83,18 @@ https://drive.google.com/file/d/1_UcEC8l-ug3ilsZQ2rCFEUmWVuPChvQw/view?usp=drive
 
 ## Screenshots
 
-### Intro Screen
+<table>
+  <tr>
+    <td width="50%" align="center"><img src="Screenshots/00_Intro_Screen.png" alt="Intro screen – press Enter to begin"><br><sub>Intro screen – press Enter to begin</sub></td>
+    <td width="50%" align="center"><img src="Screenshots/01_Day_Scene.png" alt="Day – sun with rotating rays, walking cow and rowing boat"><br><sub>Day – sun with rotating rays, walking cow and rowing boat</sub></td>
+  </tr>
+  <tr>
+    <td width="50%" align="center"><img src="Screenshots/02_Sunset_Scene.png" alt="Sunset – purple-orange sky and a red sun"><br><sub>Sunset – purple-orange sky and a red sun</sub></td>
+    <td width="50%" align="center"><img src="Screenshots/03_Night_Scene.png" alt="Night – moon, stars, fireflies and lit windows"><br><sub>Night – moon, stars, fireflies and lit windows</sub></td>
+  </tr>
+  <tr>
+    <td width="50%" align="center"><img src="Screenshots/04_Rain_Scene.png" alt="Rain – falling rain, splashes, lightning and jumping fish"><br><sub>Rain – falling rain, splashes, lightning and jumping fish</sub></td>
+    <td width="50%"></td>
+  </tr>
+</table>
 
-The start screen with the project title. Press Enter to begin.
-
-![Intro Screen](Screenshots/00_Intro_Screen.png)
-
-### Day Scene
-
-Blue sky, sun with rotating rays, paddy field, walking cow and the rowing boat.
-
-![Day Scene](Screenshots/01_Day_Scene.png)
-
-### Sunset Scene
-
-Purple-orange sky with the red sun going down.
-
-![Sunset Scene](Screenshots/02_Sunset_Scene.png)
-
-### Night Scene
-
-Dark sky with the moon, stars, fireflies and lit house windows.
-
-![Night Scene](Screenshots/03_Night_Scene.png)
-
-### Rain Scene
-
-Grey sky with falling rain, splashes, lightning and jumping fish.
-
-![Rain Scene](Screenshots/04_Rain_Scene.png)
