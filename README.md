@@ -13,6 +13,27 @@ Computer Graphics [A] – Final Term Project, Group 07 (AIUB).
 - Rain scene with falling rain, splashes, lightning and jumping fish.
 - Help panel and fullscreen mode.
 
+## Technologies Used
+
+- C++ (C++11)
+- OpenGL and GLU for drawing
+- FreeGLUT 3.0.0 for the window, keyboard, mouse and timer (included in the project)
+- Windows `PlaySound` (winmm) for the `.wav` background sounds
+
+## Project Structure
+
+```
+ComputerGraphics-Dreamland-Village-Ultimate/
+├── openglportable-64bit/
+│   ├── freeglut/                  # FreeGLUT headers, libraries and DLL
+│   └── openglportable/
+│       ├── main.cpp               # all drawing, animation, sound and controls
+│       ├── openglportable.cbp     # Code::Blocks project
+│       └── bin/Debug/             # openglportable.exe, freeglut.dll and the .wav sounds
+├── Final_Term_Project_Report.pdf  # project report
+└── Screenshots/
+```
+
 ## Requirements
 
 - **Windows** (the sound uses Windows `PlaySound`)
@@ -27,7 +48,7 @@ FreeGLUT is already included in the project, so you don't need to install it.
 git clone https://github.com/munshi-rishad/ComputerGraphics-Dreamland-Village-Ultimate.git
 ```
 
-## Run in VS Code
+## Setup and Run
 
 1. Install the MinGW compiler and make sure `g++ --version` works in a new terminal.
    (With Code::Blocks, add `C:\Program Files\CodeBlocks\MinGW\bin` to the Windows `PATH`.)
@@ -60,22 +81,20 @@ git clone https://github.com/munshi-rishad/ComputerGraphics-Dreamland-Village-Ul
 
 ## Controls
 
-| Key | Action |
-|-----|--------|
-| `Enter` | Start from the intro screen |
-| `1` / `2` / `3` / `4` | Day / Sunset / Night / Rain |
-| `B` | Start or stop the boat |
-| `Left` / `Right` arrow | Boat goes left / right |
-| `L` | House lights on / off |
-| `H` | Show / hide help panel |
-| `F` | Fullscreen on / off |
-| `M` / `U` | Sound off / on |
-| Mouse left / right / middle click | Boat goes right / left / stops |
-| `Esc` | Exit |
+- `Enter` – start from the intro screen
+- `1` / `2` / `3` / `4` – Day / Sunset / Night / Rain
+- `B` – start or stop the boat
+- `Left` / `Right` arrow – boat goes left / right
+- `L` – house lights on / off
+- `H` – show / hide the help panel
+- `F` – fullscreen on / off
+- `M` / `U` – sound off / on
+- Mouse left / right / middle click – boat goes right / left / stops
+- `Esc` – exit
 
 ## Project Video
 
-https://drive.google.com/file/d/1_UcEC8l-ug3ilsZQ2rCFEUmWVuPChvQw/view?usp=drive_link
+[Watch the demo video on Google Drive](https://drive.google.com/file/d/1_UcEC8l-ug3ilsZQ2rCFEUmWVuPChvQw/view?usp=drive_link)
 
 ## Project Report
 
@@ -83,18 +102,42 @@ https://drive.google.com/file/d/1_UcEC8l-ug3ilsZQ2rCFEUmWVuPChvQw/view?usp=drive
 
 ## Screenshots
 
-<table>
-  <tr>
-    <td width="50%" align="center"><img src="Screenshots/00_Intro_Screen.png" alt="Intro screen – press Enter to begin"><br><sub>Intro screen – press Enter to begin</sub></td>
-    <td width="50%" align="center"><img src="Screenshots/01_Day_Scene.png" alt="Day – sun with rotating rays, walking cow and rowing boat"><br><sub>Day – sun with rotating rays, walking cow and rowing boat</sub></td>
-  </tr>
-  <tr>
-    <td width="50%" align="center"><img src="Screenshots/02_Sunset_Scene.png" alt="Sunset – purple-orange sky and a red sun"><br><sub>Sunset – purple-orange sky and a red sun</sub></td>
-    <td width="50%" align="center"><img src="Screenshots/03_Night_Scene.png" alt="Night – moon, stars, fireflies and lit windows"><br><sub>Night – moon, stars, fireflies and lit windows</sub></td>
-  </tr>
-  <tr>
-    <td width="50%" align="center"><img src="Screenshots/04_Rain_Scene.png" alt="Rain – falling rain, splashes, lightning and jumping fish"><br><sub>Rain – falling rain, splashes, lightning and jumping fish</sub></td>
-    <td width="50%"></td>
-  </tr>
-</table>
+### 1. Intro Screen
 
+The start screen with the project title. Press Enter to begin.
+
+<p align="center">
+  <img src="Screenshots/00_Intro_Screen.png" alt="Intro Screen" width="800">
+</p>
+
+### 2. Day Scene
+
+Blue sky, sun with rotating rays, paddy field, walking cow and the rowing boat.
+
+<p align="center">
+  <img src="Screenshots/01_Day_Scene.png" alt="Day Scene" width="800">
+</p>
+
+### 3. Sunset Scene
+
+Purple-orange sky with the red sun going down.
+
+<p align="center">
+  <img src="Screenshots/02_Sunset_Scene.png" alt="Sunset Scene" width="800">
+</p>
+
+### 4. Night Scene
+
+Dark sky with the moon, twinkling stars, fireflies and lit house windows.
+
+<p align="center">
+  <img src="Screenshots/03_Night_Scene.png" alt="Night Scene" width="800">
+</p>
+
+### 5. Rain Scene
+
+Grey sky with falling rain, splashes, lightning and jumping fish.
+
+<p align="center">
+  <img src="Screenshots/04_Rain_Scene.png" alt="Rain Scene" width="800">
+</p>
