@@ -4,7 +4,7 @@ A C++ OpenGL computer graphics project that shows an animated Bangladeshi villag
 
 Computer Graphics [A] – Final Term Project, Group 07 (AIUB).
 
-**Semester:** Summer 2025-2026 (Computer Graphics)
+**Semester:** Summer 2025-2026
 
 ## Features
 
